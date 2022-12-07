@@ -12,7 +12,8 @@ export const AuthActionType = {
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
     ERROR_LOGIN: "ERROR_LOGIN",
-    REMOVE_ERROR: "REMOVE_ERROR"
+    REMOVE_ERROR: "REMOVE_ERROR",
+    LOGIN_GUEST: "LOGIN_GUEST"
 }
 
 function AuthContextProvider(props) {
@@ -20,7 +21,8 @@ function AuthContextProvider(props) {
         user: null,
         loggedIn: false,
         currentError: false,
-        errorMessage: null
+        errorMessage: null,
+        guest: false
     });
     const history = useHistory();
 
@@ -36,7 +38,8 @@ function AuthContextProvider(props) {
                     user: payload.user,
                     loggedIn: payload.loggedIn,
                     currentError: false,
-                    errorMessage: null
+                    errorMessage: null,
+                    guest: false
                 });
             }
             case AuthActionType.LOGIN_USER: {
@@ -44,7 +47,8 @@ function AuthContextProvider(props) {
                     user: payload.user,
                     loggedIn: true,
                     currentError: false,
-                    errorMessage: null
+                    errorMessage: null,
+                    guest: false
                 })
             }
             case AuthActionType.LOGOUT_USER: {
@@ -52,7 +56,8 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     currentError: false,
-                    errorMessage: null
+                    errorMessage: null,
+                    guest: false
                 })
             }
             case AuthActionType.REGISTER_USER: {
@@ -60,7 +65,8 @@ function AuthContextProvider(props) {
                     user: payload.user,
                     loggedIn: true,
                     currentError: false,
-                    errorMessage: null
+                    errorMessage: null,
+                    guest: false
                 })
             }
             case AuthActionType.ERROR_LOGIN: {
@@ -68,7 +74,8 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     currentError: true,
-                    errorMessage: payload.errorMessage
+                    errorMessage: payload.errorMessage,
+                    guest: false
                 })
             }
             case AuthActionType.REMOVE_ERROR: {
@@ -76,7 +83,17 @@ function AuthContextProvider(props) {
                     user: null,
                     loggedIn: false,
                     currentError: false,
-                    errorMessage: null
+                    errorMessage: null,
+                    guest: false
+                })
+            }
+            case AuthActionType.LOGIN_GUEST: {
+                return setAuth({
+                    user: null,
+                    loggedIn: false,
+                    currentError: false,
+                    errorMessage: null,
+                    guest: true
                 })
             }
             default:
@@ -163,6 +180,14 @@ function AuthContextProvider(props) {
         }
         console.log("user initials: " + initials);
         return initials;
+    }
+
+    auth.loginGuest = function () {
+        authReducer({
+            type: AuthActionType.LOGIN_GUEST,
+            payload: null
+        })
+        history.push("/");
     }
 
     return (

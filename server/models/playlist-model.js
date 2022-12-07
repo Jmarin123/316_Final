@@ -9,14 +9,19 @@ const Schema = mongoose.Schema
 const playlistSchema = new Schema(
     {
         name: { type: String, required: true },
+        ownerName: { type: String, required: true },
         ownerEmail: { type: String, required: true },
-        songs: { type: [{
-            title: String,
-            artist: String,
-            youTubeId: String
-        }], required: true }
+        songs: {
+            type: [{
+                title: String,
+                artist: String,
+                youTubeId: String,
+                likes: Number,
+                dislikes: Number
+            }], required: true
+        }
     },
-    { timestamps: true },
+    { timestamps: true }
 )
 
 module.exports = mongoose.model('Playlist', playlistSchema)

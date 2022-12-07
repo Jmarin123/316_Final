@@ -19,7 +19,7 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected } = props;
-
+    console.log(idNamePair);
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
         if (!event.target.disabled) {
@@ -78,18 +78,22 @@ function ListCard(props) {
             id={idNamePair._id}
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
-            style={{ width: '100%', fontSize: '48pt' }}
+            style={{ width: '100%', fontSize: '20pt' }}
             button
             onClick={(event) => {
                 handleLoadList(event, idNamePair._id)
             }}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
+            {/* <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
                     <EditIcon style={{ fontSize: '48pt' }} />
                 </IconButton>
-            </Box>
+            </Box> */}
+            <div className='cardOnList'>
+                <h3>{idNamePair.name}</h3>
+                <h6>By: {idNamePair.ownerName}</h6>
+            </div>
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={(event) => {
                     handleDeleteList(event, idNamePair._id)

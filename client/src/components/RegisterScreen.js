@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import AuthContext from '../auth'
-import Copyright from './Copyright'
 import LoginError from './LoginError';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -119,7 +118,6 @@ export default function RegisterScreen() {
                     <LoginError />
                 </Box>
             </Box>
-            <Copyright sx={{ mt: 5 }} />
         </Container>
     );
 }

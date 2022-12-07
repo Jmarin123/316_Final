@@ -1,4 +1,11 @@
+import AuthContext from '../auth'
+import React, { useContext } from "react";
 export default function SplashScreen() {
+    const { auth } = useContext(AuthContext);
+    function handleGuestSubmit(event) {
+        event.preventDefault();
+        auth.loginGuest();
+    }
     return (
         <div id="splash-screen">
             <div id="title-splash">
@@ -6,7 +13,7 @@ export default function SplashScreen() {
                 <h6>🌻You can create create your own playlists and share them with others. Hope you enjoy🌻</h6>
             </div>
             <div id="items-on-splash">
-                <form action="/home">
+                <form action="/" onSubmit={handleGuestSubmit}>
                     <input type="submit" value="🌼Guest🌼" />
                 </form>
                 <form action="/register">

@@ -112,7 +112,7 @@ getPlaylistPairs = async (req, res) => {
         async function asyncFindList(email) {
             console.log("find all Playlists owned by " + email);
             await Playlist.find({ ownerEmail: email }, (err, playlists) => {
-                console.log("found Playlists: " + JSON.stringify(playlists));
+                //console.log("found Playlists: " + JSON.stringify(playlists));
                 if (err) {
                     return res.status(400).json({ success: false, error: err })
                 }
@@ -130,7 +130,10 @@ getPlaylistPairs = async (req, res) => {
                         let list = playlists[key];
                         let pair = {
                             _id: list._id,
-                            name: list.name
+                            name: list.name,
+                            ownerName: list.ownerName,
+                            ownerEmail: list.ownerEmail,
+                            songs: list.songs
                         };
                         pairs.push(pair);
                     }
