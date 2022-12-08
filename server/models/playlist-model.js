@@ -19,7 +19,10 @@ const playlistSchema = new Schema(
                 likes: Number,
                 dislikes: Number
             }], required: true
-        }
+        },
+        likes: Number,
+        dislikes: Number,
+        publishDate: { type: Number, required: true }
     },
     { timestamps: true }
 )

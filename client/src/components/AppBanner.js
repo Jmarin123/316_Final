@@ -80,9 +80,6 @@ export default function AppBanner() {
     if (auth.loggedIn) {
         console.log("we are loggioned in so menu should change");
         menu = loggedInMenu;
-        if (store.currentList) {
-            editToolbar = <EditToolbar />;
-        }
     }
 
     function getAccountMenu(loggedIn) {

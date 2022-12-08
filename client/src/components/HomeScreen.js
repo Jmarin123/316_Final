@@ -3,6 +3,9 @@ import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 
+
+import WorkspaceScreen from './WorkspaceScreen'
+import YouTubePlayer from './YoutubePlayer'
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
@@ -12,8 +15,7 @@ import { BsPeopleFill, BsFillPersonFill } from "react-icons/bs";
 import TextField from '@mui/material/TextField';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
-
+import { GiHamburgerMenu } from "react-icons/gi";
 import AuthContext from '../auth'
 
 /*
@@ -30,6 +32,9 @@ const HomeScreen = () => {
     const [text, setText] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
+    const [listingType, setListingType] = useState("home");
+    const [sortState, setSortState] = useState("");
+    const [youtubeOrComments, setComments] = useState("youtube");
 
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
@@ -37,14 +42,15 @@ const HomeScreen = () => {
 
 
     const handleHomeClick = (event) => {
-        console.log("HEY!");
+        setListingType("home");
     }
     const handleListClick = (event) => {
-        console.log("OOF");
+        setListingType("allLists");
     }
     const handlePersonClick = (event) => {
-        console.log("EAA");
+        setListingType("personList")
     }
+
 
     const handleMenuClose = () => {
         setAnchorEl(null);
@@ -55,15 +61,61 @@ const HomeScreen = () => {
     }
     function handleKeyPress(event) {
         if (event.code === "Enter") {
-            console.log(text);
+            console.log(listingType);
         }
     }
     function handleUpdateText(event) {
         setText(event.target.value);
     }
     console.log("This is the user rn: " + auth.user);
+    let iconsTopLeft;
+    if (auth.guest) {
+        //this is a guest!
+        if (listingType == "home") {
+            setListingType("allLists");
+        }
+        iconsTopLeft = <div>
+            <IoMdHome className="topBarButton" id="disabledHome" />
+            <BsPeopleFill className="topBarButton" onClick={handleListClick} />
+            <BsFillPersonFill className="topBarButton" onClick={handlePersonClick} />
+        </div>
+    } else {
+        iconsTopLeft = <div>
+            <IoMdHome className="topBarButton" onClick={handleHomeClick} />
+            <BsPeopleFill className="topBarButton" onClick={handleListClick} />
+            <BsFillPersonFill className="topBarButton" onClick={handlePersonClick} />
+        </div>
+    }
     let listCard = "";
+    let youtubePlaySongs = [];
+    if (store.currentList) {
+        for (let song of store.currentList.songs) {
+            console.log(song);
+            youtubePlaySongs.push(song.youTubeId);
+        }
+    }
+    let youtubeOrCommentPage = ""
+    if (youtubeOrComments == 'youtube') {
+        youtubeOrCommentPage =
+            <div>
+                <YouTubePlayer playlist={youtubePlaySongs} />
+            </div>
+    } else {
+        youtubeOrCommentPage =
+            <div></div>
+    }
     if (store) {
+        if (sortState == "nameSort") {
+            store.idNamePairs.sort((a, b) => {
+                return a.name.localeCompare(b.name)
+            })
+        } else if (sortState == "dateSort") {
+            store.idNamePairs.sort((a, b) => {
+                return a.publicDate - b.publishDate
+            })
+
+            //Todo: DO THE REST OF THE SORTS 
+        }
         listCard =
             <List sx={{ width: '90%', left: '5%', bgcolor: 'background.paper' }} >
                 {
@@ -80,11 +132,9 @@ const HomeScreen = () => {
     return (
         <div id="playlist-selector">
             <div id="right-below-navbar">
-                <div>
-                    <IoMdHome className="topBarButton" onClick={handleHomeClick} />
-                    <BsPeopleFill className="topBarButton" onClick={handleListClick} />
-                    <BsFillPersonFill className="topBarButton" onClick={handlePersonClick} />
-                </div>
+                {
+                    iconsTopLeft
+                }
                 <div id="searchBar">
                     <TextField
                         margin="normal"
@@ -103,34 +153,7 @@ const HomeScreen = () => {
                 </div>
                 <div id="filterBox">
                     <h2><strong>SORT BY</strong></h2>
-
-                    <Menu
-                        anchorEl={anchorEl}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        id='selecting-the-sort'
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={isMenuOpen}
-                        onClose={handleMenuClose}
-                    >
-                        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
-                    </Menu>
-                    <IconButton
-                        size="large"
-                        edge="end"
-                        aria-label="account of current user"
-                        aria-controls={'testtinngg'}
-                        aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
-                        color="inherit"
-                    >
-                    </IconButton>
+                    <GiHamburgerMenu onClick={handleProfileMenuOpen} id="hamburgerSort" />
                 </div>
             </div>
             <div id="seperating-list-and-youtube">
@@ -141,7 +164,15 @@ const HomeScreen = () => {
                     <MUIDeleteModal />
                 </div>
                 <div id="youtube-player">
-
+                    <div id="items-to-select-between-youtube-and-comments">
+                        <div id="select-youtube" onClick={() => { setComments('youtube') }}>
+                            Youtube
+                        </div>
+                        <div id="select-comments" onClick={() => { setComments('comments') }}>
+                            Comments
+                        </div>
+                    </div>
+                    {youtubeOrCommentPage}
                 </div>
             </div>
             <div id="list-select">
@@ -155,6 +186,28 @@ const HomeScreen = () => {
                 </Fab>
                 <Typography variant="h2">Your Lists</Typography>
             </div>
+            <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                id='selecting-the-sort'
+                keepMounted
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                open={isMenuOpen}
+                onClose={handleMenuClose}
+            >
+                <MenuItem onClick={() => setSortState("nameSort")}>Name (A-Z)</MenuItem>
+                <MenuItem onClick={() => setSortState("dateSort")}>Publish Date (Newest)</MenuItem>
+                <MenuItem onClick={() => setSortState("listenSort")}>Listens(High - Low)</MenuItem>
+                <MenuItem onClick={() => setSortState("likeSort")}>Likes (High - Low)</MenuItem>
+                <MenuItem onClick={() => setSortState("dislikeSort")}>Dislikes (High - Low)</MenuItem>
+            </Menu>
+            <WorkspaceScreen />
         </div>)
 }
 

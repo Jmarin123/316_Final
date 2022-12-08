@@ -133,7 +133,10 @@ getPlaylistPairs = async (req, res) => {
                             name: list.name,
                             ownerName: list.ownerName,
                             ownerEmail: list.ownerEmail,
-                            songs: list.songs
+                            songs: list.songs,
+                            publishDate: list.publishDate,
+                            likes: list.likes,
+                            dislikes: list.dislikes
                         };
                         pairs.push(pair);
                     }
@@ -157,6 +160,24 @@ getPlaylists = async (req, res) => {
         return res.status(200).json({ success: true, data: playlists })
     }).catch(err => console.log(err))
 }
+
+getPublishedPlaylists = async (req, res) => {
+    await Playlist.find({}, (err, playlists) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if (!playlists.length) {
+            return res
+                .status(404)
+                .json({ success: false, error: `Playlists not found` })
+        }
+        const publishedPlaylist = playlists.filter((playlist) => {
+            return playlist.publishDate !== -1
+        })
+        return res.status(200).json({ success: true, data: publishedPlaylist })
+    }).catch(err => console.log(err))
+}
+
 updatePlaylist = async (req, res) => {
     const body = req.body
     console.log("updatePlaylist: " + JSON.stringify(body));
@@ -189,6 +210,9 @@ updatePlaylist = async (req, res) => {
 
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
+                    list.publishDate = body.playlist.publishDate;
+                    list.likes = body.playlist.likes;
+                    list.dislikes = body.playlist.dislikes;
                     list
                         .save()
                         .then(() => {
@@ -222,5 +246,6 @@ module.exports = {
     getPlaylistById,
     getPlaylistPairs,
     getPlaylists,
-    updatePlaylist
+    updatePlaylist,
+    getPublishedPlaylists
 }

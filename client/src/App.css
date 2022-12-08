@@ -189,6 +189,8 @@ button {
   flex-direction: column;
   height: 100%;
   width: 100%; */
+  display: flex;
+  flex-direction: row;
   height: 70vh;
 }
 
@@ -207,6 +209,10 @@ button {
   /* margin-top: 60px; */
 }
 
+.song-link {
+  margin-right: 80px;
+}
+
 .MuiList-root {
   background-color: transparent !important;
 }
@@ -214,6 +220,52 @@ button {
 .MuiListItem-root {
   background-color: white !important;
   border-radius: 10px !important;
+}
+
+#items-to-select-between-youtube-and-comments {
+  display: flex;
+  flex-direction: row;
+}
+
+#select-youtube {
+  border-style: solid;
+  width: 100px;
+  height: 20px;
+  border-color: black;
+  border-width: 1px;
+  text-align: center;
+  margin-left: 10px;
+  border-bottom-style: none;
+  cursor: pointer;
+  border-radius: 10px 10px 0 0;
+}
+
+
+#select-comments {
+  border-style: solid;
+  width: 100px;
+  height: 20px;
+  border-color: black;
+  border-width: 1px;
+  text-align: center;
+  border-bottom-style: none;
+  cursor: pointer;
+  border-radius: 10px 10px 0 0;
+}
+
+#openedListCurrent {
+  overflow-y: scroll;
+  height: 200px;
+  margin-bottom: 50px;
+}
+
+#addSongCardCustom {
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  background-color: #f1ffc4 !important;
+  color: black;
 }
 
 
@@ -238,6 +290,42 @@ button {
   text-decoration-color: none;
   color: black;
   cursor: pointer;
+}
+
+.cardOnList {
+  margin-right: auto;
+  margin-left: 5px;
+}
+
+.allListCards {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between !important;
+}
+
+.drop-down-card-list {
+  height: 100%;
+  margin-right: 0;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+#filterBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#hamburgerSort {
+  font-size: 35px;
+  margin: 5px;
+  padding-bottom: 7px;
+  cursor: pointer;
+}
+
+#disabledHome {
+  color: gray;
+  cursor: not-allowed;
 }
 
 /* #list-home-select {
@@ -278,9 +366,13 @@ button {
 .list-card,
 .selected-list-card,
 .unselected-list-card {
-  font-size: 18pt;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12pt;
   margin: 10px;
   padding: 20px;
+  width: 100%;
   border-radius: 25px;
 }
 
@@ -309,7 +401,6 @@ button {
 
 .list-card-button {
   float: right;
-  transform: scale(2);
 }
 
 #workspace-home,
@@ -319,6 +410,48 @@ button {
   top: 0%;
   width: 100%;
   height: 100%;
+}
+
+#realUserEditingPlaylist {
+  width: 100%;
+}
+
+#customized-row-for-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.Button-In-List-Editor {
+  padding: 20px;
+  margin: 2px;
+  background-color: #ffcaaf;
+  border-style: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.topRowForList {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.likes-and-dislikes {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+}
+
+.allLikes,
+.allDislikes {
+  cursor: pointer;
+}
+
+
+.youtubeIcons {
+  font-size: 40px;
+  cursor: pointer;
 }
 
 #edit-numbering {
